@@ -10,7 +10,7 @@ dependencies = [
     "cssselect",
 ]
 
+[project.scripts]
+
 [tool.setuptools]
 packages = ["wikirefs"]
-
-[project.scripts]
