@@ -1,0 +1,12 @@
+# Python stuff
+*.pyc
+__pycache__/
+.pytest_cache/
+/venv
+*.egg-info/
+
+# Emacs stuff
+*~
+
+# VS Code stuff
+/.vscode
