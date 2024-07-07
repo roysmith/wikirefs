@@ -1,7 +1,5 @@
 from pathlib import Path
-from textwrap import dedent
 
-from lxml import etree
 import pytest
 from bs4 import BeautifulSoup
 

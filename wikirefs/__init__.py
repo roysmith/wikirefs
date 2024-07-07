@@ -1,8 +1,6 @@
 from dataclasses import dataclass
 import re
 
-from bs4 import BeautifulSoup, Tag
-
 
 @dataclass(frozen=True)
 class Statement:
