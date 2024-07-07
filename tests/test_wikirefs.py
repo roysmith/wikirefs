@@ -1,45 +1,30 @@
+from pathlib import Path
+from textwrap import dedent
+
 from lxml import etree
+import pytest
+from bs4 import BeautifulSoup
 
 import wikirefs
 
 
-def test_import():
-    assert wikirefs
+@pytest.fixture
+def ref_sample_1():
+    with Path(__file__).parent / "ref-sample-1.html" as datafile:
+        return datafile.read_text()
 
 
-def test_find_one_ref():
-    html = r"""<html>
-                    <body>
-                        <sup id="cite_ref-Schneider1974_3-2" class="reference">
-                            <a href="#cite_note-Schneider1974-3">
-                                &#91;3&#93;
-                           </a>
-                        </sup>
-                    </body>
-                </html>"""
-    tree = etree.fromstring(html, etree.HTMLParser())
-    elements = tree.cssselect("sup[id^='cite_ref-']")
-    assert [e.get("id") for e in elements] == ["cite_ref-Schneider1974_3-2"]
+class TestParseParagraph:
+    def test_no_text(self):
+        p = BeautifulSoup("<p></p>")
+        assert wikirefs.parse_paragraph(p) == []
 
-
-def test_find_two_refs():
-    html = r"""<html>
-                    <body>
-                        <sup id="cite_ref-Schneider1974_3-2" class="reference">
-                            <a href="#cite_note-Schneider1974-3">
-                                &#91;3&#93;
-                           </a>
-                        </sup>
-                        <sup id="cite_ref-Schneider1974_3-5" class="reference">
-                            <a href="#cite_note-Schneider1974-3">
-                                &#91;3&#93;
-                           </a>
-                        </sup>
-                    </body>
-                </html>"""
-    tree = etree.fromstring(html, etree.HTMLParser())
-    elements = tree.cssselect("sup[id^='cite_ref-']")
-    assert [e.get("id") for e in elements] == [
-        "cite_ref-Schneider1974_3-2",
-        "cite_ref-Schneider1974_3-5",
-    ]
+    def test_one_statement(self):
+        p = BeautifulSoup(
+            """<p>statement.
+            <sup id="cite_ref-1" class="reference">
+            <a href="#cite_note-1">&#91;1&#93;</a>
+            </sup> </p>"""
+        )
+        statements = wikirefs.parse_paragraph(p)
+        assert statements == [wikirefs.Statement("statement.", ["1"])]
