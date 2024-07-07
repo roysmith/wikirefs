@@ -12,13 +12,17 @@ def ref_sample_1():
         return datafile.read_text()
 
 
+def parse(text):
+    return BeautifulSoup(text, features="lxml")
+
+
 class TestParseParagraph:
     def test_no_text(self):
-        p = BeautifulSoup("<p></p>")
+        p = parse("<p></p>")
         assert wikirefs.parse_paragraph(p) == []
 
     def test_one_statement(self):
-        p = BeautifulSoup(
+        p = parse(
             """<p>statement.
             <sup id="cite_ref-1" class="reference">
             <a href="#cite_note-1">&#91;1&#93;</a>
