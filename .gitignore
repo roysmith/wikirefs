@@ -10,3 +10,7 @@ __pycache__/
 
 # VS Code stuff
 /.vscode
+
+# pywikibot stuff
+apicache/
+throttle.ctrl
