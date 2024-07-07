@@ -14,8 +14,8 @@ def parse_paragraph(paragraph):
     statements = []
     working_text = text
     for sup in sups:
-        id = sup.get("id")
-        ref_label = id.removeprefix("cite_ref-")
+        ref_id = sup.get("id")
+        ref_label = ref_id.removeprefix("cite_ref-")
         delim = f"[{ref_label}]"
         text, more = working_text.split(delim, maxsplit=1)
         statements.append(Statement(text.strip(), [ref_label]))
