@@ -9,6 +9,8 @@ dependencies = [
     "lxml",
     "cssselect",
     "pytest",
+    "beautifulsoup4",
+    "more-itertools",
 ]
 
 [project.scripts]
