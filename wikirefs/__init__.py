@@ -100,8 +100,8 @@ def citation_id(node: Tag) -> Optional[str]:
 
 
 def get_statements(soup: BeautifulSoup) -> Iterator[Statement]:
-    """Find all the statements in a document.  In theory, only
-    user-visible text is enclosed in <p> tags, so this (intentionally)
+    """Find all the statements in a document.  In theory, all
+    user-visible text is enclosed in <p> tags; this (intentionally)
     excludes text outside of that.
 
     """
