@@ -17,7 +17,8 @@ class Citation:
     name is the reference name, either a name attribute supplied
         in a <ref> element, or one invented by VisualEditor.
 
-    suffix is used when a reference is used more than once.
+    suffix is an optional disambguator added when a reference is used
+    more than once.  "0" maps to "a", "1" to "b", etc.
     """
 
     ref_id: str
