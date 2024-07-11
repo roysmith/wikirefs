@@ -1,7 +1,9 @@
+from pathlib import Path
+
 import pytest
 from bs4 import BeautifulSoup
 
-from wikirefs import get_statements, Citation, Statement
+from wikirefs import get_statements, get_paragraph_statements, Citation, Statement
 
 
 def parse(text):
@@ -64,10 +66,10 @@ class TestCitation:
         assert Citation.bijectiveHexavigesimal(n) == expected_string
 
 
-class TestGetStatements:
+class TestGetParagraphStatements:
     def test_no_text(self):
         p = parse("<p></p>")
-        assert list(get_statements(p)) == []
+        assert list(get_paragraph_statements(p)) == []
 
     def test_one_statement(self):
         p = parse(
@@ -77,7 +79,7 @@ class TestGetStatements:
             </p>
             """
         )
-        statements = list(get_statements(p))
+        statements = list(get_paragraph_statements(p))
         assert statements == [Statement("statement.", [Citation("cite_ref-1", "1")])]
 
     def test_two_citations(self):
@@ -90,7 +92,7 @@ class TestGetStatements:
             </p>
         """
         )
-        statements = list(get_statements(p))
+        statements = list(get_paragraph_statements(p))
         assert statements == [
             Statement(
                 "Statement",
@@ -100,3 +102,52 @@ class TestGetStatements:
                 ],
             ),
         ]
+
+
+class TestGetStatements:
+    def test_sample_1(self):
+        sample = Path(__file__).parent / "data/sample-1.html"
+        text = sample.read_text()
+        soup = BeautifulSoup(text, "lxml")
+        statements = list(get_statements(soup))
+        expected_statements = [
+            Statement(
+                "This is the first statement.",
+                [
+                    Citation("cite_ref-:2_1-0", number="1", name="2", suffix="0"),
+                    Citation("cite_ref-:0_2-0", number="2", name="0", suffix="0"),
+                    Citation("cite_ref-:1_3-0", number="3", name="1", suffix="0"),
+                ],
+            ),
+            Statement(
+                "And this is the second.",
+                [
+                    Citation("cite_ref-:0_2-1", number="2", name="0", suffix="1"),
+                ],
+            ),
+            Statement(
+                "And the third.",
+                [
+                    Citation("cite_ref-:1_3-1", number="3", name="1", suffix="1"),
+                ],
+            ),
+            Statement(
+                "Another paragraph",
+                [
+                    Citation("cite_ref-:2_1-1", number="1", name="2", suffix="1"),
+                ],
+            ),
+            Statement(
+                "with some citations.",
+                [
+                    Citation("cite_ref-:0_2-2", number="2", name="0", suffix="2"),
+                ],
+            ),
+            Statement(
+                "And a new section!",
+                [
+                    Citation("cite_ref-:1_3-2", number="3", name="1", suffix="2"),
+                ],
+            ),
+        ]
+        assert statements == expected_statements

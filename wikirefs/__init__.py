@@ -3,7 +3,7 @@ from enum import Enum
 import re
 from typing import Optional
 
-from bs4 import NavigableString, Tag
+from bs4 import NavigableString, Tag, BeautifulSoup
 
 import more_itertools
 
@@ -89,7 +89,13 @@ def citation_id(node: Tag) -> Optional[str]:
         )
 
 
-def get_statements(p: Tag):
+def get_statements(soup: BeautifulSoup):
+    for p in soup.find_all("p"):
+        for statement in get_paragraph_statements(p):
+            yield statement
+
+
+def get_paragraph_statements(p: Tag):
     words = []
     citations = []
     state = State.STRING
