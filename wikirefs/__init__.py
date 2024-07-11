@@ -18,7 +18,7 @@ class Citation:
         in a <ref> element, or one invented by VisualEditor.
 
     suffix is an optional disambguator added when a reference is used
-    more than once.  "0" maps to "a", "1" to "b", etc.
+        more than once.  "0" maps to "a", "1" to "b", etc.
     """
 
     ref_id: str
