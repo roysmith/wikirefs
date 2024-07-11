@@ -80,14 +80,23 @@ class TestGetStatements:
         statements = list(get_statements(p))
         assert statements == [Statement("statement.", [Citation("cite_ref-1", "1")])]
 
-    def test_two_statements(self):
+    def test_two_citations(self):
         p = parse(
             """
             <p>
                 Statement
                 <sup id="cite_ref-1" class="reference"><a href="#cite_note-1">&#91;1&#93;</a></sup>
-                <sup id="cite_ref-2" class="reference"><a href="#cite_note-2">&#91;1&#93;</a></sup>
+                <sup id="cite_ref-2" class="reference"><a href="#cite_note-2">&#91;2&#93;</a></sup>
             </p>
         """
         )
         statements = list(get_statements(p))
+        assert statements == [
+            Statement(
+                "Statement",
+                [
+                    Citation("cite_ref-1", "1"),
+                    Citation("cite_ref-2", "2"),
+                ],
+            ),
+        ]

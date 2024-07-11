@@ -16,6 +16,8 @@ class Citation:
 
     name is the reference name, either a name attribute supplied
         in a <ref> element, or one invented by VisualEditor.
+
+    suffix is used when a reference is used more than once.
     """
 
     ref_id: str
@@ -105,7 +107,7 @@ def get_statements(p: Tag):
                     words.extend(node.string.split())
             case State.CITATION:
                 if cid := citation_id(node):
-                    citations.append(node.string)
+                    citations.append(Citation.from_id(cid))
                 else:
                     text = " ".join(words)
                     yield Statement(text, citations)
