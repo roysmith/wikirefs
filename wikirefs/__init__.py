@@ -1,7 +1,9 @@
+"""wikirefs utilities"""
+
 from dataclasses import dataclass
 from enum import Enum
 import re
-from typing import Optional
+from typing import Optional, Iterator
 
 from bs4 import NavigableString, Tag, BeautifulSoup
 
@@ -28,6 +30,7 @@ class Citation:
 
     @staticmethod
     def from_id(ref_id: str):
+        """Factory function"""
         pattern = re.compile(
             r"""
             cite_ref-               # constant prefix
@@ -42,25 +45,31 @@ class Citation:
         else:
             raise ValueError(f"cannot parse ref_id '{ref_id}'")
 
-    def rendered_suffix(self):
+    def rendered_suffix(self) -> str:
+        """If this citation has a suffix, return it in the format used
+        by wiki references, i.e. 'a', 'b' ... 'z', 'aa', ...
+
+        """
         if self.suffix:
-            return self.bijectiveHexavigesimal(int(self.suffix) + 1)
+            return self.bijective_hexavigesimal(int(self.suffix) + 1)
         else:
             return ""
 
     # Courtesy of User:Ahecht (https://w.wiki/AcQC)
     @staticmethod
-    def bijectiveHexavigesimal(n: int):
+    def bijective_hexavigesimal(n: int):
         "Convert a integer (1-based) to bijective base-26"
-        outStr = ""
+        out_str = ""
         while n != 0:
-            outStr = chr((n - 1) % 26 + 97) + outStr
+            out_str = chr((n - 1) % 26 + 97) + out_str
             n = (n - 1) // 26
-        return outStr
+        return out_str
 
 
 @dataclass(frozen=True)
 class Statement:
+    """A hunk of text and the citations that support it."""
+
     text: str
     citations: list[Citation]
 
@@ -90,13 +99,19 @@ def citation_id(node: Tag) -> Optional[str]:
         )
 
 
-def get_statements(soup: BeautifulSoup):
+def get_statements(soup: BeautifulSoup) -> Iterator[Statement]:
+    """Find all the statements in a document.  In theory, only
+    user-visible text is enclosed in <p> tags, so this (intentionally)
+    excludes text outside of that.
+
+    """
     for p in soup.find_all("p"):
         for statement in get_paragraph_statements(p):
             yield statement
 
 
-def get_paragraph_statements(p: Tag):
+def get_paragraph_statements(p: Tag) -> Iterator[Statement]:
+    """Find all the statements in a single paragraph"""
     words = []
     citations = []
     state = State.STRING

@@ -1,3 +1,7 @@
+# pylint: disable=missing-function-docstring
+# pylint: disable=missing-module-docstring
+# pylint: disable=missing-class-docstring
+
 from pathlib import Path
 
 import pytest
@@ -62,14 +66,14 @@ class TestCitation:
             (27, "aa"),
         ],
     )
-    def test_bijectiveHexavigesimal(self, n, expected_string):
-        assert Citation.bijectiveHexavigesimal(n) == expected_string
+    def test_bijective_exavigesimal(self, n, expected_string):
+        assert Citation.bijective_hexavigesimal(n) == expected_string
 
 
 class TestGetParagraphStatements:
     def test_no_text(self):
         p = parse("<p></p>")
-        assert list(get_paragraph_statements(p)) == []
+        assert not list(get_paragraph_statements(p))
 
     def test_one_statement(self):
         p = parse(
