@@ -1,0 +1,18 @@
+mkdir -p $HOME/www/python
+cd $HOME/www/python
+git clone git@github.com:roysmith/wikirefs.git src
+toolforge webservice --backend=kubernetes python3.11 shell
+
+# The rest of this is done on the k8s host
+# See https://wikitech.wikimedia.org/wiki/Help:Toolforge/Web/Python
+python3 -m venv --prompt wikirefs venv
+source venv/bin/activate
+pip install --upgrade pip wheel
+
+# I don't understand why, but you have to do the following two steps in order.
+# If you try "pip install src", it won't work.
+cd src
+pip install .
+
+# Optionally run the tests as a sanity check:
+pytest
