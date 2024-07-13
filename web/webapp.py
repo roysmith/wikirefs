@@ -1,10 +1,14 @@
 import secrets
 
+from bs4 import BeautifulSoup
 import flask
 from flask import render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
+from pywikibot import Site, Page
 from wtforms import StringField
 from wtforms.validators import DataRequired
+
+import wikirefs
 
 app = flask.Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
@@ -21,7 +25,11 @@ def index():
 
 @app.route("/show")
 def show():
-    return render_template("show.html", page_title=request.args.get("page_title"))
+    site = Site("en")
+    page = Page(site, request.args.get("page_title"))
+    soup = BeautifulSoup(page.get_parsed_page(), features="lxml")
+    statements = wikirefs.get_statements(soup)
+    return render_template("show.html", statements=statements)
 
 
 class PageForm(FlaskForm):

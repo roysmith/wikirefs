@@ -4,5 +4,18 @@
 
 
 {% block content %}
-{{ page_title }}
+<ul>
+    {% for s in statements %}
+    <li>
+        {{ s.text }}
+        <ol>
+            {% for c in s.citations %}
+            <ol>
+                {{ c.ref_id }}
+            </ol>
+            {% endfor %}
+        </ol>
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}
