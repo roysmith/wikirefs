@@ -1,13 +1,11 @@
-<!DOCTYPE html>
+{% extends "base.html" %}
 
-<head>
-    <title>Page Form</title>
-</head>
+{% block title %}Index{% endblock %}
 
-<body>
-    <form method="POST" action="/">
-        {{ form.csrf_token }}
-        {{ form.page_title.label }} {{ form.page_title(size=50) }}
-        <input type="submit" value="Do it!">
-    </form>
-</body>
+{% block content %}
+<form method="POST" action="/">
+    {{ form.csrf_token }}
+    {{ form.page_title.label }} {{ form.page_title(size=50) }}
+    <input type="submit" value="Do it!">
+</form>
+{% endblock %}
