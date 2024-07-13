@@ -11,6 +11,8 @@ dependencies = [
     "pytest",
     "beautifulsoup4",
     "more-itertools",
+    "flask",
+    "flask-wtf",
 ]
 
 [project.scripts]
