@@ -86,6 +86,26 @@ class TestGetParagraphStatements:
         statements = list(get_paragraph_statements(p))
         assert statements == [Statement("statement.", [Citation("cite_ref-1", "1")])]
 
+    def test_statement_with_links(self):
+        p = parse(
+            """
+                <p>After graduating from college in 1903,
+                Austin worked for <a href="/wiki/General_Electric" title="General Electric">General Electric</a>
+                in <a href="/wiki/Schenectady,_New_York" title="Schenectady, New York">Schenectady, New York</a>.
+                <sup id="cite_ref-:3_1-0" class="reference"><a href="#cite_note-:3-1">[1]</a></sup>
+                He was hired by <a href="/wiki/Pacific_Gas_and_Electric_Company" title="Pacific Gas and Electric Company">
+                Pacific Gas and Electric</a>, initially acting as their eastern representative doing insulator testing.
+                <sup id="cite_ref-:0_2-0" class="reference"><a href="#cite_note-:0-2">[2]</a></sup>
+                <sup id="cite_ref-:3_1-1" class="reference"><a href="#cite_note-:3-1">[1]</a></sup>
+            </p>
+            """
+        )
+        statements = list(get_paragraph_statements(p))
+        assert [s.text for s in statements] == [
+            "After graduating from college in 1903, Austin worked for General Electric in Schenectady, New York .",
+            "He was hired by Pacific Gas and Electric , initially acting as their eastern representative doing insulator testing.",
+        ]
+
     def test_two_citations(self):
         p = parse(
             """

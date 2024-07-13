@@ -135,6 +135,7 @@ def get_paragraph_statements(p: Tag) -> Iterator[Statement]:
                     yield Statement(text, citations)
                     words = node.string.split()
                     citations = []
+                    state = State.STRING
             case _:
                 raise RuntimeError(f"Unknown state: {state}")
 
