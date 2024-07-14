@@ -4,18 +4,21 @@
 
 
 {% block content %}
-<ul>
-    {% for s in statements %}
-    <li>
+{% for s in statements %}
+<div class="card mb-3 text-bg-light">
+    <div class="card-body">
         {{ s.text }}
-        <ol>
+    </div>
+
+    <div class="card-footer">
+        <ul class="list-group">
             {% for c in s.citations %}
-            <ol>
+            <li class="list-group-item">
                 {{ c.ref_id }}
-            </ol>
+            </li>
             {% endfor %}
-        </ol>
-    </li>
-    {% endfor %}
-</ul>
+        </ul>
+    </div>
+</div>
+{% endfor %}
 {% endblock %}
