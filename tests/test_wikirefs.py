@@ -2,7 +2,6 @@
 # pylint: disable=missing-module-docstring
 # pylint: disable=missing-class-docstring
 
-from pathlib import Path
 
 import pytest
 from bs4 import BeautifulSoup
@@ -129,10 +128,8 @@ class TestGetParagraphStatements:
 
 
 class TestGetStatements:
-    def test_sample_1(self):
-        sample = Path(__file__).parent / "data/sample-1.html"
-        text = sample.read_text()
-        soup = BeautifulSoup(text, "lxml")
+    def test_sample_1(self, sample_1_html):
+        soup = BeautifulSoup(sample_1_html, "lxml")
         statements = list(get_statements(soup))
         expected_statements = [
             Statement(
