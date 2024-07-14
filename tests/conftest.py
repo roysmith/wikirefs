@@ -12,3 +12,9 @@ def sample_1_html():
 def sample_2_html():
     sample = Path(__file__).parent / "data/sample-2.html"
     return sample.read_text()
+
+
+@pytest.fixture
+def arthur_o_austin_html():
+    sample = Path(__file__).parent / "data/arthur-o-austin.html"
+    return sample.read_text()
