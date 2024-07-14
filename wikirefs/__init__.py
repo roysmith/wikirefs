@@ -144,3 +144,12 @@ def get_paragraph_statements(p: Tag) -> Iterator[Statement]:
     if words or citations:
         text = " ".join(words)
         yield Statement(text, citations)
+
+
+def get_reference_for_ref_id(soup: BeautifulSoup, ref_id: str) -> Tag:
+    sup_tag = soup.find("sup", id=ref_id)
+    note_fragment = sup_tag.find("a").get("href")
+    note_id = note_fragment.removeprefix("#")
+    li_tag = soup.find("li", id=note_id)
+    cite_tag = li_tag.find("span", class_="reference-text")
+    return cite_tag

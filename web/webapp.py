@@ -28,8 +28,15 @@ def show():
     site = Site("en")
     page = Page(site, request.args.get("page_title"))
     soup = BeautifulSoup(page.get_parsed_page(), features="lxml")
-    statements = wikirefs.get_statements(soup)
-    return render_template("show.html", statements=statements)
+    statements = list(wikirefs.get_statements(soup))
+    citation_map = {}
+    for statement in statements:
+        for citation in statement.citations:
+            ref_id = citation.ref_id
+            citation_map[ref_id] = wikirefs.get_reference_for_ref_id(soup, ref_id)
+    return render_template(
+        "show.html", statements=statements, citation_map=citation_map
+    )
 
 
 class PageForm(FlaskForm):

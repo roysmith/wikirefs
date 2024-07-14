@@ -6,7 +6,13 @@
 import pytest
 from bs4 import BeautifulSoup
 
-from wikirefs import get_statements, get_paragraph_statements, Citation, Statement
+from wikirefs import (
+    get_statements,
+    get_paragraph_statements,
+    get_reference_for_ref_id,
+    Citation,
+    Statement,
+)
 
 
 def parse(text):
@@ -172,3 +178,22 @@ class TestGetStatements:
             ),
         ]
         assert statements == expected_statements
+
+
+class TestGetReference:
+    def test_get_reference_for_ref_id(self, sample_1_html):
+        soup = BeautifulSoup(sample_1_html, "lxml")
+        cite_tag = get_reference_for_ref_id(soup, "cite_ref-:2_1-0")
+        assert cite_tag.name == "span"
+        assert cite_tag.get("class") == ["reference-text"]
+
+    def test_arthur_o_austin(self, arthur_o_austin_html):
+        soup = BeautifulSoup(arthur_o_austin_html, "lxml")
+        statements = list(get_statements(soup))
+        citation_map = {}
+        for statement in statements:
+            for citation in statement.citations:
+                ref_id = citation.ref_id
+                citation_map[ref_id] = get_reference_for_ref_id(soup, ref_id)
+        ref_15 = citation_map["cite_ref-15"]
+        assert "issued August 7, 1934" in ref_15.text

@@ -4,6 +4,8 @@
 
 
 {% block content %}
+
+
 {% for s in statements %}
 <div class="card mb-4 bg-success-subtle">
     <div class="card-body">
@@ -14,7 +16,7 @@
         <ul class="list-group">
             {% for c in s.citations %}
             <li class="list-group-item">
-                {{ c.ref_id }}
+                {{ citation_map[c.ref_id]|safe }}
             </li>
             {% endfor %}
         </ul>
