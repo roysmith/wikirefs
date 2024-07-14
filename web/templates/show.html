@@ -10,13 +10,16 @@
 <div class="card mb-4 bg-success-subtle">
     <div class="card-body">
         {{ s.text }}
+        {% for c in s.citations %}
+        [{{ c.number }}]
+        {% endfor %}
     </div>
 
     <div class="card-footer">
         <ul class="list-group">
             {% for c in s.citations %}
             <li class="list-group-item">
-                {{ citation_map[c.ref_id]|safe }}
+                ({{ c.number }}) {{ citation_map[c.ref_id]|safe }}
             </li>
             {% endfor %}
         </ul>
