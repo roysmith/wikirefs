@@ -13,6 +13,7 @@ dependencies = [
     "more-itertools",
     "flask",
     "flask-wtf",
+    "pywikibot",
 ]
 
 [project.scripts]
