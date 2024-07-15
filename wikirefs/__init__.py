@@ -34,7 +34,7 @@ class Citation:
         pattern = re.compile(
             r"""
             cite_ref-               # constant prefix
-            (:(?P<name>[^_]+)_)?    # optional ref name (":0_" or ":foo_")
+            ((?P<name>.+)_)?     # optional ref name (":0_" or "foo_")
             (?P<number>\d+)         # user-visible ref number ("1")
             (-(?P<suffix>\d+))?     # optional ref number suffix ("-0")
             """,

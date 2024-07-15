@@ -25,9 +25,27 @@ class TestCitation:
         "id_string, expected",
         [
             ("cite_ref-1", Citation("cite_ref-1", "1")),
-            ("cite_ref-:foo_1-0", Citation("cite_ref-:foo_1-0", "1", "foo", "0")),
-            ("cite_ref-:foo_1-2", Citation("cite_ref-:foo_1-2", "1", "foo", "2")),
-            ("cite_ref-:0_1-2", Citation("cite_ref-:0_1-2", "1", "0", "2")),
+            ("cite_ref-foo_1-0", Citation("cite_ref-foo_1-0", "1", "foo", "0")),
+            ("cite_ref-foo_1-2", Citation("cite_ref-foo_1-2", "1", "foo", "2")),
+            ("cite_ref-:0_1-2", Citation("cite_ref-:0_1-2", "1", ":0", "2")),
+            (
+                "cite_ref-FOOTNOTEHendel200018_7-0",
+                Citation(
+                    "cite_ref-FOOTNOTEHendel200018_7-0",
+                    "7",
+                    "FOOTNOTEHendel200018",
+                    "0",
+                ),
+            ),
+            (
+                "cite_ref-internal_underscores_15-0",
+                Citation(
+                    "cite_ref-internal_underscores_15-0",
+                    "15",
+                    "internal_underscores",
+                    "0",
+                ),
+            ),
         ],
     )
     def test_from_id(self, id_string, expected):
@@ -142,39 +160,39 @@ class TestGetStatements:
             Statement(
                 "This is the first statement.",
                 [
-                    Citation("cite_ref-:2_1-0", number="1", name="2", suffix="0"),
-                    Citation("cite_ref-:0_2-0", number="2", name="0", suffix="0"),
-                    Citation("cite_ref-:1_3-0", number="3", name="1", suffix="0"),
+                    Citation("cite_ref-:2_1-0", number="1", name=":2", suffix="0"),
+                    Citation("cite_ref-:0_2-0", number="2", name=":0", suffix="0"),
+                    Citation("cite_ref-:1_3-0", number="3", name=":1", suffix="0"),
                 ],
             ),
             Statement(
                 "And this is the second.",
                 [
-                    Citation("cite_ref-:0_2-1", number="2", name="0", suffix="1"),
+                    Citation("cite_ref-:0_2-1", number="2", name=":0", suffix="1"),
                 ],
             ),
             Statement(
                 "And the third.",
                 [
-                    Citation("cite_ref-:1_3-1", number="3", name="1", suffix="1"),
+                    Citation("cite_ref-:1_3-1", number="3", name=":1", suffix="1"),
                 ],
             ),
             Statement(
                 "Another paragraph",
                 [
-                    Citation("cite_ref-:2_1-1", number="1", name="2", suffix="1"),
+                    Citation("cite_ref-:2_1-1", number="1", name=":2", suffix="1"),
                 ],
             ),
             Statement(
                 "with some citations.",
                 [
-                    Citation("cite_ref-:0_2-2", number="2", name="0", suffix="2"),
+                    Citation("cite_ref-:0_2-2", number="2", name=":0", suffix="2"),
                 ],
             ),
             Statement(
                 "And a new section!",
                 [
-                    Citation("cite_ref-:1_3-2", number="3", name="1", suffix="2"),
+                    Citation("cite_ref-:1_3-2", number="3", name=":1", suffix="2"),
                 ],
             ),
         ]
