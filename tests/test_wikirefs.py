@@ -10,6 +10,7 @@ from wikirefs import (
     get_statements,
     get_paragraph_statements,
     get_reference_for_ref_id,
+    build_citation_map,
     Citation,
     Statement,
 )
@@ -190,10 +191,6 @@ class TestGetReference:
     def test_arthur_o_austin(self, arthur_o_austin_html):
         soup = BeautifulSoup(arthur_o_austin_html, "lxml")
         statements = list(get_statements(soup))
-        citation_map = {}
-        for statement in statements:
-            for citation in statement.citations:
-                ref_id = citation.ref_id
-                citation_map[ref_id] = get_reference_for_ref_id(soup, ref_id)
+        citation_map = build_citation_map(soup, statements)
         ref_15 = citation_map["cite_ref-15"]
         assert "issued August 7, 1934" in ref_15.text

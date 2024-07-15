@@ -3,7 +3,7 @@
 from dataclasses import dataclass
 from enum import Enum
 import re
-from typing import Optional, Iterator
+from typing import Optional, Iterator, Mapping
 
 from bs4 import NavigableString, Tag, BeautifulSoup
 
@@ -153,3 +153,14 @@ def get_reference_for_ref_id(soup: BeautifulSoup, ref_id: str) -> Tag:
     li_tag = soup.find("li", id=note_id)
     cite_tag = li_tag.find("span", class_="reference-text")
     return cite_tag
+
+
+def build_citation_map(
+    soup: BeautifulSoup, statements: list[Statement]
+) -> Mapping[str, Tag]:
+    citation_map = {}
+    for statement in statements:
+        for citation in statement.citations:
+            ref_id = citation.ref_id
+            citation_map[ref_id] = get_reference_for_ref_id(soup, ref_id)
+    return citation_map
