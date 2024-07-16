@@ -17,6 +17,11 @@ dependencies = [
 ]
 
 [project.scripts]
+get-html = "wikirefs_tools.get_html:main"
+
 
 [tool.setuptools]
-packages = ["wikirefs"]
+packages = [
+    "wikirefs",
+    "wikirefs_tools",
+    ]
