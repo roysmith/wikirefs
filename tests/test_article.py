@@ -1,8 +1,6 @@
 from bs4 import BeautifulSoup
 
-from wikirefs.article import Article
-from wikirefs.citation import Citation
-from wikirefs.statement import Statement
+from wikirefs import Article, Citation, Statement
 
 
 def parse(text):

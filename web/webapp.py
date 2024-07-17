@@ -8,7 +8,7 @@ from pywikibot import Site, Page
 from wtforms import StringField
 from wtforms.validators import DataRequired
 
-from wikirefs.article import Article
+from wikirefs import Article
 
 app = flask.Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
