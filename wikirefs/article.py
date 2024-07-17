@@ -94,22 +94,18 @@ class Article:
                 and node2.get("id")
             )
 
+    def get_reference_for_ref_id(self, ref_id: str) -> Tag:
+        sup_tag = self.soup.find("sup", id=ref_id)
+        note_fragment = sup_tag.find("a").get("href")
+        note_id = note_fragment.removeprefix("#")
+        li_tag = self.soup.find("li", id=note_id)
+        cite_tag = li_tag.find("span", class_="reference-text")
+        return cite_tag
 
-def get_reference_for_ref_id(soup: BeautifulSoup, ref_id: str) -> Tag:
-    sup_tag = soup.find("sup", id=ref_id)
-    note_fragment = sup_tag.find("a").get("href")
-    note_id = note_fragment.removeprefix("#")
-    li_tag = soup.find("li", id=note_id)
-    cite_tag = li_tag.find("span", class_="reference-text")
-    return cite_tag
-
-
-def build_citation_map(
-    soup: BeautifulSoup, statements: list[Statement]
-) -> Mapping[str, Tag]:
-    citation_map = {}
-    for statement in statements:
-        for citation in statement.citations:
-            ref_id = citation.ref_id
-            citation_map[ref_id] = get_reference_for_ref_id(soup, ref_id)
-    return citation_map
+    def build_citation_map(self, statements: list[Statement]) -> Mapping[str, Tag]:
+        citation_map = {}
+        for statement in statements:
+            for citation in statement.citations:
+                ref_id = citation.ref_id
+                citation_map[ref_id] = self.get_reference_for_ref_id(ref_id)
+        return citation_map

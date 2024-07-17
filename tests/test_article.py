@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 
-from wikirefs.article import Article, get_reference_for_ref_id, build_citation_map
+from wikirefs.article import Article
 from wikirefs.citation import Citation
 from wikirefs.statement import Statement
 
@@ -121,15 +121,14 @@ class TestGetStatements:
 
 class TestGetReference:
     def test_get_reference_for_ref_id(self, sample_1_html):
-        soup = BeautifulSoup(sample_1_html, "lxml")
-        cite_tag = get_reference_for_ref_id(soup, "cite_ref-:2_1-0")
+        article = Article.from_html(sample_1_html)
+        cite_tag = article.get_reference_for_ref_id("cite_ref-:2_1-0")
         assert cite_tag.name == "span"
         assert cite_tag.get("class") == ["reference-text"]
 
     def test_arthur_o_austin(self, arthur_o_austin_html):
-        soup = BeautifulSoup(arthur_o_austin_html, "lxml")
-        article = Article(soup)
+        article = Article.from_html(arthur_o_austin_html)
         statements = list(article.get_statements())
-        citation_map = build_citation_map(soup, statements)
+        citation_map = article.build_citation_map(statements)
         ref_15 = citation_map["cite_ref-15"]
         assert "issued August 7, 1934" in ref_15.text

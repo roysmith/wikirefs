@@ -8,7 +8,7 @@ from pywikibot import Site, Page
 from wtforms import StringField
 from wtforms.validators import DataRequired
 
-from wikirefs.article import Article, build_citation_map
+from wikirefs.article import Article
 
 app = flask.Flask(__name__)
 app.config["SECRET_KEY"] = secrets.token_hex()
@@ -29,7 +29,7 @@ def show():
     page = Page(site, request.args.get("page_title"))
     article = Article.from_html(page.get_parsed_page())
     statements = list(article.get_statements())
-    citation_map = build_citation_map(article.soup, statements)
+    citation_map = article.build_citation_map(statements)
     return render_template(
         "show.html", statements=statements, citation_map=citation_map
     )
