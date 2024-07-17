@@ -1,6 +1,5 @@
 import secrets
 
-from bs4 import BeautifulSoup
 import flask
 from flask import render_template, request, redirect, url_for
 from flask_wtf import FlaskForm
