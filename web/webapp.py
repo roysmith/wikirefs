@@ -28,7 +28,7 @@ def show():
     site = Site("en")
     page = Page(site, request.args.get("page_title"))
     article = Article.from_html(page.get_parsed_page())
-    statements = list(article.get_statements())
+    statements = article.get_statements()
     citation_map = article.build_citation_map(statements)
     return render_template(
         "show.html", statements=statements, citation_map=citation_map

@@ -2,7 +2,7 @@
 
 from dataclasses import dataclass
 from enum import Enum
-from typing import Iterator, Optional, Mapping
+from typing import Optional, Mapping
 
 
 from bs4 import BeautifulSoup, Tag, NavigableString
@@ -34,21 +34,24 @@ class Article:
         """
         return Article(BeautifulSoup(html, features="lxml"))
 
-    def get_statements(self) -> Iterator[Statement]:
+    def get_statements(self) -> list[Statement]:
         """Find all the statements in a document.  In theory, all
         user-visible text is enclosed in <p> tags; this (intentionally)
         excludes text outside of that.
 
         """
+        statements = []
         for p in self.soup.find_all("p"):
             for statement in Article.get_paragraph_statements(p):
-                yield statement
+                statements.append(statement)
+        return statements
 
     @staticmethod
-    def get_paragraph_statements(p: Tag) -> Iterator[Statement]:
+    def get_paragraph_statements(p: Tag) -> list[Statement]:
         """Find all the statements in a single paragraph"""
         words = []
         citations = []
+        statements = []
         state = State.STRING
         for node in p.descendants:
             if not isinstance(node, NavigableString):
@@ -67,7 +70,7 @@ class Article:
                         citations.append(Citation.from_id(cid))
                     else:
                         text = " ".join(words)
-                        yield Statement(text, citations)
+                        statements.append(Statement(text, citations))
                         words = node.string.split()
                         citations = []
                         state = State.STRING
@@ -78,7 +81,8 @@ class Article:
         # to flush the last statement collected.
         if words or citations:
             text = " ".join(words)
-            yield Statement(text, citations)
+            statements.append(Statement(text, citations))
+        return statements
 
     @staticmethod
     def citation_id(node: Tag) -> Optional[str]:

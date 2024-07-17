@@ -15,7 +15,7 @@ def test_construct():
 class TestGetParagraphStatements:
     def test_no_text(self):
         p = parse("<p></p>")
-        assert not list(Article.get_paragraph_statements(p))
+        assert not Article.get_paragraph_statements(p)
 
     def test_one_statement(self):
         p = parse(
@@ -25,7 +25,7 @@ class TestGetParagraphStatements:
             </p>
             """
         )
-        statements = list(Article.get_paragraph_statements(p))
+        statements = Article.get_paragraph_statements(p)
         assert statements == [Statement("statement.", [Citation("cite_ref-1", "1")])]
 
     def test_statement_with_links(self):
@@ -42,7 +42,7 @@ class TestGetParagraphStatements:
             </p>
             """
         )
-        statements = list(Article.get_paragraph_statements(p))
+        statements = Article.get_paragraph_statements(p)
         assert [s.text for s in statements] == [
             "After graduating from college in 1903, Austin worked for General Electric in Schenectady, New York .",
             "He was hired by Pacific Gas and Electric , initially acting as their eastern representative doing insulator testing.",
@@ -58,7 +58,7 @@ class TestGetParagraphStatements:
             </p>
         """
         )
-        statements = list(Article.get_paragraph_statements(p))
+        statements = Article.get_paragraph_statements(p)
         assert statements == [
             Statement(
                 "Statement",
@@ -73,7 +73,7 @@ class TestGetParagraphStatements:
 class TestGetStatements:
     def test_sample_1(self, sample_1_html):
         article = Article.from_html(sample_1_html)
-        statements = list(article.get_statements())
+        statements = article.get_statements()
         expected_statements = [
             Statement(
                 "This is the first statement.",
@@ -126,7 +126,7 @@ class TestGetReference:
 
     def test_arthur_o_austin(self, arthur_o_austin_html):
         article = Article.from_html(arthur_o_austin_html)
-        statements = list(article.get_statements())
+        statements = article.get_statements()
         citation_map = article.build_citation_map(statements)
         ref_15 = citation_map["cite_ref-15"]
         assert "issued August 7, 1934" in ref_15.text
