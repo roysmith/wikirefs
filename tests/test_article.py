@@ -1,3 +1,5 @@
+import pytest
+
 from bs4 import BeautifulSoup
 
 from wikirefs import Article, Citation, Statement
@@ -26,7 +28,8 @@ class TestGetParagraphStatements:
             """
         )
         statements = Article.get_paragraph_statements(p)
-        assert statements == [Statement("statement.", [Citation("cite_ref-1", "1")])]
+        expected = [Statement("statement.", [Citation("cite_ref-1", "1")])]
+        assert statements == expected
 
     def test_statement_with_links(self):
         p = parse(
@@ -130,3 +133,20 @@ class TestGetReference:
         citation_map = article.build_citation_map(statements)
         ref_15 = citation_map["cite_ref-15"]
         assert "issued August 7, 1934" in ref_15.text
+
+
+@pytest.mark.parametrize(
+    "html, expected",
+    [
+        ("<p>blah</p>", False),
+        ("<sup><a href='foo'>1</a></sup>", False),
+        ("<sup class='ref'><a href='foo'>1</a></sup>", False),
+        ("<sup class='reference' id='foo'><a href='foo'>1</a></sup>", True),
+    ],
+)
+def test_is_reference(html, expected):
+    soup = parse(html)
+    # Strip away the <html> and <body> tags that got added
+    # for free.
+    tag = soup.contents[0].contents[0].contents[0]
+    assert Article.is_reference(tag) == expected

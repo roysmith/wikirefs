@@ -1,5 +1,7 @@
 import pytest
 
+from bs4 import BeautifulSoup
+
 from wikirefs.citation import Citation
 
 
@@ -32,6 +34,14 @@ from wikirefs.citation import Citation
 )
 def test_from_id(id_string, expected):
     citation = Citation.from_id(id_string)
+    assert citation == expected
+
+
+def test_from_tag(sample_1_html):
+    soup = BeautifulSoup(sample_1_html)
+    navigable_string_tag = soup.select_one("sup[id='cite_ref-:2_1-0'] > a").string
+    citation = Citation.from_reference_tag(navigable_string_tag)
+    expected = Citation("cite_ref-:2_1-0", "[1]")
     assert citation == expected
 
 

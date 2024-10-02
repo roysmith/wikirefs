@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 import re
 
+from bs4 import Tag, NavigableString
+
 
 @dataclass(frozen=True)
 class Citation:
@@ -36,6 +38,12 @@ class Citation:
             return Citation(ref_id, **m.groupdict())
         else:
             raise ValueError(f"cannot parse ref_id '{ref_id}'")
+
+    @staticmethod
+    def from_reference_tag(tag: NavigableString):
+        ref_id = tag.parent.parent.get("id")
+        number = tag.text.removeprefix("[").removesuffix("]")
+        return Citation(ref_id, number)
 
     def rendered_suffix(self) -> str:
         """If this citation has a suffix, return it in the format used

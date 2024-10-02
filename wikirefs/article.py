@@ -60,14 +60,14 @@ class Article:
                 continue
             match state:
                 case State.STRING:
-                    if cid := Article.citation_id(node):
-                        citations.append(Citation.from_id(cid))
+                    if Article.is_reference(node):
+                        citations.append(Citation.from_reference_tag(node))
                         state = State.CITATION
                     else:
                         words.extend(node.string.split())
                 case State.CITATION:
-                    if cid := Article.citation_id(node):
-                        citations.append(Citation.from_id(cid))
+                    if Article.is_reference(node):
+                        citations.append(Citation.from_reference_tag(node))
                     else:
                         text = " ".join(words)
                         statements.append(Statement(text, citations))
@@ -97,6 +97,10 @@ class Article:
                 and node2.get("class") == ["reference"]
                 and node2.get("id")
             )
+
+    @staticmethod
+    def is_reference(tag: Tag) -> bool:
+        return tag.name == "sup" and tag.get("class") == ["reference"]
 
     def get_reference_for_ref_id(self, ref_id: str) -> Tag:
         sup_tag = self.soup.find("sup", id=ref_id)
