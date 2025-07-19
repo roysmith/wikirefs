@@ -41,7 +41,7 @@ def test_from_tag(sample_1_html):
     soup = BeautifulSoup(sample_1_html)
     navigable_string_tag = soup.select_one("sup[id='cite_ref-:2_1-0'] > a").string
     citation = Citation.from_reference_tag(navigable_string_tag)
-    expected = Citation("cite_ref-:2_1-0", "[1]")
+    expected = Citation("cite_ref-:2_1-0", "1")
     assert citation == expected
 
 
