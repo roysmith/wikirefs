@@ -24,4 +24,5 @@ get-html = "wikirefs_tools.get_html:main"
 packages = [
     "wikirefs",
     "wikirefs_tools",
+    "wikireflib",
     ]

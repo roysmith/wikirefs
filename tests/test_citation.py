@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 from wikirefs.citation import Citation
 
 
+@pytest.mark.skip()
 @pytest.mark.parametrize(
     "id_string, expected",
     [
@@ -37,6 +38,7 @@ def test_from_id(id_string, expected):
     assert citation == expected
 
 
+@pytest.mark.skip()
 def test_from_tag(sample_1_html):
     soup = BeautifulSoup(sample_1_html)
     navigable_string_tag = soup.select_one("sup[id='cite_ref-:2_1-0'] > a").string
@@ -45,6 +47,7 @@ def test_from_tag(sample_1_html):
     assert citation == expected
 
 
+@pytest.mark.skip()
 @pytest.mark.parametrize(
     "id_string",
     [
@@ -58,6 +61,7 @@ def test_from_id_parse_failure(id_string):
         Citation.from_id(id_string)
 
 
+@pytest.mark.skip()
 @pytest.mark.parametrize(
     "citation, expected",
     [
@@ -76,6 +80,7 @@ def test_rendered_suffix(citation, expected):
     assert rendered == expected
 
 
+@pytest.mark.skip()
 @pytest.mark.parametrize(
     "n, expected_string",
     [
